@@ -6,7 +6,6 @@ QQ付费入群系统Mirai机器人插件
 1. 修改源码内的机器人数据库连接信息  
 
 ```java
-static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/fk";
 static final String USER = "fk";
 static final String PASS = "password";
