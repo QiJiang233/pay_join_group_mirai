@@ -38,17 +38,23 @@ public final class Payjoingroup extends JavaPlugin {
 
         //群入群申请监听器
         Listener listener2 = GlobalEventChannel.INSTANCE.subscribeAlways(MemberJoinRequestEvent.class, event -> {
+
             long qqid = event.getFromId();
+            System.out.println("收到" + qqid + "的入群事件");
 
             try {
                 if (getGroupWhiteList(qqid)) {
                     event.accept();
+                    System.out.println("已同意" + qqid + "的入群事件");
                 } else {
                     event.reject(false, REJECT_STRING);
+                    System.out.println("已拒绝" + qqid + "的入群事件");
                 }
             } catch (SQLException throwables) {
+                System.out.println("入群事件--异常抛出");
                 throwables.printStackTrace();
             } catch (ClassNotFoundException e) {
+                System.out.println("入群事件--异常抛出");
                 e.printStackTrace();
             }
 
@@ -57,21 +63,23 @@ public final class Payjoingroup extends JavaPlugin {
 
         //成员新增监听器
         Listener listener3 = GlobalEventChannel.INSTANCE.subscribeAlways(MemberJoinEvent.class, event -> {
-
+            System.out.println("群员新增事件");
             MessageChain chain = new MessageChainBuilder()
                     .append(new At(event.getUser().getId()))
-                    .append("\n" +
-                            "欢迎加入：" + event.getGroup().getName() + "\n")
+                    .append("\n欢迎加入：" + event.getGroup().getName() + "\n")
                     .append("Tips:你已成功进群,已执行删除相关订单数据,退群不作退费,并无法再次申请")
                     .build();
 
             event.getGroup().sendMessage(chain);
 
             try {
+                System.out.println("执行修改订单数据");
                 updateGroupWhiteList(event.getUser().getId());
             } catch (SQLException throwables) {
+                System.out.println("执行修改订单数据--异常抛出");
                 throwables.printStackTrace();
             } catch (ClassNotFoundException e) {
+                System.out.println("执行修改订单数据--异常抛出");
                 e.printStackTrace();
             }
 
