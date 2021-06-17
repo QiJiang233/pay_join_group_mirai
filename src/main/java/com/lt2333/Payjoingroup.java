@@ -15,10 +15,16 @@ import java.sql.*;
 public final class Payjoingroup extends JavaPlugin {
     public static final Payjoingroup INSTANCE = new Payjoingroup();
 
+    //JDBC_DRIVER
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+
+    //数据库连接信息
     static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/fk";
     static final String USER = "fk";
     static final String PASS = "password";
+
+    //拒绝申请理由
+    static final String REJECT_STRING = "请在xxx.xxx.com支付后入群";
 
     private Payjoingroup() {
         super(new JvmPluginDescriptionBuilder("com.lt2333.payjoingroup", "1.0")
@@ -38,7 +44,7 @@ public final class Payjoingroup extends JavaPlugin {
                 if (getGroupWhiteList(qqid)) {
                     event.accept();
                 } else {
-                    event.reject(false, "请在xxx.xxx.com支付后入群");
+                    event.reject(false, REJECT_STRING);
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -60,7 +66,6 @@ public final class Payjoingroup extends JavaPlugin {
                     .build();
 
             event.getGroup().sendMessage(chain);
-
 
             try {
                 updateGroupWhiteList(event.getUser().getId());
